@@ -16,12 +16,17 @@ const scoreText = document.getElementById("scoreText");
 let score = 0;
 SetText("click to start!");
 
-var isJumping = false;
+let isJumping = false;
 let gameOver = true;
+
+let dinoMaxHeight = 150;
+let dinoMinHeight = 55;
+let cactusWidth = 7;
+let birdWidth = 11;
 
 function Main() {
   if (!gameOver) {
-    score = score + 1;
+    score++;
     SetText("Score: " + score);
     CheckGameOver();
   }
@@ -56,7 +61,7 @@ setInterval(function () {
 }, 1000);
 
 function increaseSpeed() {
-    // increase animation speeds for dino, bird, and cactus
+  // increase animation speeds for dino, bird, and cactus
 }
 
 function RemoveJump() {
@@ -95,9 +100,10 @@ function checkCollision(
   cactusLeft: number,
   birdLeft: number
 ): void {
-  if (dinoTop >= 150 && Math.abs(cactusLeft) < 7) {
-    endGame();
-  } else if (dinoTop <= 55 && Math.abs(birdLeft) < 11) {
+  if (
+    (dinoTop >= dinoMaxHeight && Math.abs(cactusLeft) < cactusWidth) ||
+    (dinoTop <= dinoMinHeight && Math.abs(birdLeft) < birdWidth)
+  ) {
     endGame();
   }
 }

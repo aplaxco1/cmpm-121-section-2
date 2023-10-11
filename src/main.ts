@@ -42,7 +42,10 @@ function jump() {
   if (!gameOver && !isJumping) {
     isJumping = true;
     dino?.classList.add("jump");
-    setTimeout(RemoveJump, 500);
+    setTimeout(function () {
+      dino?.classList.remove("jump");
+      isJumping = false;
+    }, 500);
   } else {
     StartGame();
   }
@@ -56,43 +59,29 @@ function StartGame() {
   bird?.classList.add("birdMove");
 }
 
-setInterval(function () {
-  increaseSpeed();
-}, 1000);
+// setInterval(function () {
+//   increaseSpeed();
+// }, 1000);
 
-function increaseSpeed() {
-  // increase animation speeds for dino, bird, and cactus
-}
-
-function RemoveJump() {
-  dino?.classList.remove("jump");
-  isJumping = false;
-}
-
-function RemoveObstacles() {
-  cactus?.classList.remove("cactusMove");
-  bird?.classList.remove("birdMove");
-}
+// function increaseSpeed() {
+//   // increase animation speeds for dino, bird, and cactus
+// }
 
 function CheckGameOver() {
   if (!gameOver && dino && cactus && bird) {
     //get is dinosaur jumping
-    let dinoTop = parseInt(
-      window.getComputedStyle(dino).getPropertyValue("top")
-    );
-
+    let dinoTop = getPos(dino, "top");
     //get cactus position
-    let cactusLeft = parseInt(
-      window.getComputedStyle(cactus).getPropertyValue("left")
-    );
-
+    let cactusLeft = getPos(cactus, "left");
     //get bird position
-    let birdLeft = parseInt(
-      window.getComputedStyle(bird).getPropertyValue("left")
-    );
-
+    let birdLeft = getPos(bird, "left");
+    // check for collisions
     checkCollision(dinoTop, cactusLeft, birdLeft);
   }
+}
+
+function getPos(obj: HTMLElement, pos: string): number {
+  return parseInt(window.getComputedStyle(obj).getPropertyValue(pos));
 }
 
 function checkCollision(
@@ -115,10 +104,12 @@ function endGame(): void {
   gameOver = true;
 
   //reset player
-  RemoveJump();
+  dino?.classList.remove("jump");
+  isJumping = false;
 
   //reset cactus
-  RemoveObstacles();
+  cactus?.classList.remove("cactusMove");
+  bird?.classList.remove("birdMove");
 }
 
 function SetText(s: string) {
